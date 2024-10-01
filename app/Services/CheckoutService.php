@@ -2,15 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\ShoppingCart;
-use App\Models\Transaction;
 use App\Mail\SendOrderConfirmation;
-use App\Models\Buyer;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Models\User;
+use App\Models\{Buyer, ShoppingCart, Transaction, User};
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\{DB, Mail};
 
 /**
  * CheckoutService handles the checkout process for a shopping cart.
@@ -23,9 +19,8 @@ class CheckoutService
      * It begins a database transaction and attempts to create a Transaction record for each cart item.
      * It sends an order confirmation email upon success or rolls back the transaction on failure.
      *
-     * @param User|null $user The user performing the checkout.
-     * @param array $buyerData
-     * @return array Returns the status of the checkout process along with appropriate messages and transaction details.
+     * @param  User|null $user the user performing the checkout
+     * @return array     returns the status of the checkout process along with appropriate messages and transaction details
      */
     public function processCheckout(?User $user, array $buyerData): array
     {
@@ -58,9 +53,11 @@ class CheckoutService
             return ['status' => 'success', 'message' => 'Your purchase has been completed successfully!', 'transactionDetails' => $transactionDetails];
         } catch (ModelNotFoundException) {
             DB::rollBack();
+
             return ['status' => 'error', 'message' => 'Product not found.'];
         } catch (Exception) {
             DB::rollBack();
+
             return ['status' => 'error', 'message' => 'An error occurred while processing your order. Please try again.'];
         }
     }

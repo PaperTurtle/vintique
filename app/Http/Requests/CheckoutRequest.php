@@ -13,9 +13,7 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class CheckoutRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    /** Determine if the user is authorized to make this request. */
     public function authorize(): bool
     {
         return auth()->check();
@@ -24,7 +22,7 @@ class CheckoutRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array|string>
+     * @return array<string, array|string|ValidationRule>
      */
     public function rules(): array
     {

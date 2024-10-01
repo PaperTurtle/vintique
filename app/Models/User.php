@@ -3,32 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\{HasMany, HasOne};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-/**
- * Represents a user in the system.
- *
- * @property int $id Unique identifier for the user.
- * @property string $name Name of the user.
- * @property string $email Email address of the user.
- * @property Carbon|null $email_verified_at Timestamp when the user's email was verified. Can be null.
- * @property string $password Password of the user (hashed).
- * @property string|null $remember_token Token for the user's session. Can be null.
- * @property Carbon|null $created_at Timestamp when the user account was created. Can be null.
- * @property Carbon|null $updated_at Timestamp when the user account was last updated. Can be null.
- * @property bool $isArtisan Flag indicating whether the user is an artisan.
- *
- * @package App\Models
- */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -63,8 +48,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Get the user profile associated with the user.
-     *
-     * @return HasOne
      */
     public function profile(): HasOne
     {
@@ -73,8 +56,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Get the products created by the user (artisan).
-     *
-     * @return HasMany
      */
     public function products(): HasMany
     {
@@ -83,8 +64,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Get the reviews written by the user.
-     *
-     * @return HasMany
      */
     public function reviews(): HasMany
     {
@@ -93,8 +72,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Get the cart associated with the user.
-     *
-     * @return HasOne
      */
     public function cart(): HasOne
     {
@@ -104,8 +81,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Get the transactions where the user is the buyer.
-     *
-     * @return HasMany
      */
     public function transactions(): HasMany
     {

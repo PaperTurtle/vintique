@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Product;
-use App\Models\Category;
+use App\Models\{Category, Product};
 
 it('has many products', function () {
     $category = Category::factory()->create();
@@ -13,13 +12,13 @@ it('has many products', function () {
 });
 
 it('has correct fillable attributes', function () {
-    $category = new Category();
+    $category = new Category;
 
     expect($category->getFillable())->toBe(['name', 'description']);
 });
 
 it('has correct casts', function () {
-    $category = new Category();
+    $category = new Category;
 
     expect($category->getCasts())->toHaveKey('created_at', 'datetime');
     expect($category->getCasts())->toHaveKey('updated_at', 'datetime');

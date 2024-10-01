@@ -1,9 +1,6 @@
 <?php
 
-use App\Models\Product;
-use App\Models\Review;
-use App\Models\Transaction;
-use App\Models\User;
+use App\Models\{Product, Review, Transaction, User};
 
 it('can have multiple products', function () {
     $user = User::factory()->hasProducts(3)->create();

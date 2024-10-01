@@ -2,24 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Represents an individual item in a user's shopping cart.
- *
- * @property int $id Unique identifier for the shopping cart item.
- * @property int $user_id Foreign key referencing the user who owns the shopping cart item.
- * @property int $product_id Foreign key referencing the product in the shopping cart.
- * @property int $quantity The quantity of the product in the shopping cart. Defaults to 1.
- * @property Carbon|null $created_at Timestamp when the cart item was created. Can be null.
- * @property Carbon|null $updated_at Timestamp when the cart item was last updated. Can be null.
- * @property-read float|int $total_price Accessor to calculate the total price of the cart item, based on the quantity and the product's price.
- *
- * @package App\Models
- */
 class ShoppingCart extends Model
 {
     use HasFactory;
@@ -37,8 +23,6 @@ class ShoppingCart extends Model
 
     /**
      * Define the relationship with the user who owns the cart item.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -47,8 +31,6 @@ class ShoppingCart extends Model
 
     /**
      * Define the relationship with the product in the cart.
-     *
-     * @return BelongsTo
      */
     public function product(): BelongsTo
     {
@@ -57,8 +39,6 @@ class ShoppingCart extends Model
 
     /**
      * Accessor to calculate the total price of the cart item.
-     *
-     * @return float|int
      */
     public function getTotalPriceAttribute(): float|int
     {
@@ -67,8 +47,6 @@ class ShoppingCart extends Model
 
     /**
      * Check if the shopping cart is empty.
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {

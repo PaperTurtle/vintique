@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Product;
+use App\Models\{Product, ProductImage};
 use Illuminate\Http\UploadedFile;
-use App\Models\ProductImage;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -17,10 +16,9 @@ class ImageService
      * Process and store multiple images for a given product.
      * Iterates through each image file, processes, and stores them in the specified location.
      *
-     * @param Product $product The product to associate the images with.
-     * @param array $images An array of UploadedFile objects representing the images.
-     * @param string $name The name used for alternative text in images.
-     * @return void
+     * @param Product $product the product to associate the images with
+     * @param array   $images  an array of UploadedFile objects representing the images
+     * @param string  $name    the name used for alternative text in images
      */
     public function processAndStoreImages(Product $product, array $images, string $name): void
     {
@@ -54,14 +52,28 @@ class ImageService
     }
 
     /**
+     * Delete a product image from storage.
+     * Removes the image file and its resized versions from the storage and deletes the corresponding ProductImage record.
+     *
+     * @param ProductImage $productImage the ProductImage instance to delete
+     */
+    public function deleteImage(ProductImage $productImage): void
+    {
+        Storage::delete($productImage->image_path);
+        Storage::delete($productImage->resized_image_path);
+        Storage::delete($productImage->show_image_path);
+        Storage::delete($productImage->thumbnail_image_path);
+        $productImage->delete();
+    }
+
+    /**
      * Store an individual image associated with a product.
      * Processes the image and creates various versions (original, resized, show, thumbnail).
      * Updates or creates a ProductImage record with the image paths.
      *
-     * @param Product $product The product to associate the image with.
-     * @param UploadedFile $imageFile The image file to be processed and stored.
-     * @param string $name The name used for alternative text in images.
-     * @return void
+     * @param Product      $product   the product to associate the image with
+     * @param UploadedFile $imageFile the image file to be processed and stored
+     * @param string       $name      the name used for alternative text in images
      */
     private function storeImage(Product $product, UploadedFile $imageFile, string $name): void
     {
@@ -90,14 +102,14 @@ class ImageService
         ProductImage::updateOrCreate(
             [
                 'product_id' => $product->id,
-                'image_path' => $originalImagePath
+                'image_path' => $originalImagePath,
             ],
             [
                 'resized_image_path' => $resizedImagePath,
                 'show_image_path' => $showImagePath,
                 'thumbnail_image_path' => $thumbnailImagePath,
                 'alt_text' => $name,
-            ]
+            ],
         );
     }
 
@@ -105,10 +117,9 @@ class ImageService
      * Process an image using a specified processor script.
      * Applies a node.js script to perform operations like resizing on the image.
      *
-     * @param string $sourcePath Path of the source image.
-     * @param string $destinationPath Path to store the processed image.
-     * @param string $processorScript The script used to process the image.
-     * @return void
+     * @param string $sourcePath      path of the source image
+     * @param string $destinationPath path to store the processed image
+     * @param string $processorScript the script used to process the image
      */
     private function processImage(string $sourcePath, string $destinationPath, string $processorScript): void
     {
@@ -117,21 +128,5 @@ class ImageService
             escapeshellarg(storage_path('app/public/' . $destinationPath));
 
         exec($nodeCommand);
-    }
-
-    /**
-     * Delete a product image from storage.
-     * Removes the image file and its resized versions from the storage and deletes the corresponding ProductImage record.
-     *
-     * @param ProductImage $productImage The ProductImage instance to delete.
-     * @return void
-     */
-    public function deleteImage(ProductImage $productImage): void
-    {
-        Storage::delete($productImage->image_path);
-        Storage::delete($productImage->resized_image_path);
-        Storage::delete($productImage->show_image_path);
-        Storage::delete($productImage->thumbnail_image_path);
-        $productImage->delete();
     }
 }

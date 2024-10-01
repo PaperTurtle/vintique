@@ -4,9 +4,7 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Attachment;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\{Attachment, Content, Envelope};
 use Illuminate\Queue\SerializesModels;
 
 /**
@@ -15,29 +13,22 @@ use Illuminate\Queue\SerializesModels;
  */
 class ContactMail extends Mailable
 {
-    use Queueable, SerializesModels;
-
-    /**
-     * @var array The data received from the contact form.
-     */
-    public array $data;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new message instance.
      * Initializes the mail with data provided from the contact form.
      *
-     * @param array $data Data passed to the email view.
+     * @param array $data data passed to the email view
      */
-    public function __construct(array $data)
-    {
-        $this->data = $data;
-    }
+    public function __construct(public array $data) {}
 
     /**
      * Get the message envelope.
      * Defines the subject of the email.
      *
-     * @return Envelope Returns an Envelope instance with the subject of the email.
+     * @return Envelope returns an Envelope instance with the subject of the email
      */
     public function envelope(): Envelope
     {
@@ -50,7 +41,7 @@ class ContactMail extends Mailable
      * Get the message content definition.
      * Determines the view and data to be used in the email content.
      *
-     * @return Content Returns a Content instance specifying the view and data for the email.
+     * @return Content returns a Content instance specifying the view and data for the email
      */
     public function content(): Content
     {
@@ -65,7 +56,7 @@ class ContactMail extends Mailable
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, Attachment> Returns an array of attachments.
+     * @return array<int, Attachment> returns an array of attachments
      */
     public function attachments(): array
     {

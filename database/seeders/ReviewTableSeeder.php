@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Review;
+use Illuminate\Database\Seeder;
 
 class ReviewTableSeeder extends Seeder
 {
@@ -41,7 +41,7 @@ class ReviewTableSeeder extends Seeder
                 'product_id' => $review['product_id'],
                 'user_id' => $review['user_id'],
                 'rating' => $review['rating'],
-                'review' => $review['review']
+                'review' => $review['review'],
             ]);
         }
     }

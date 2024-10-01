@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\ProductImage;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * A Laravel console command to clean orphaned images.
@@ -34,9 +34,7 @@ class CleanOrphanedImages extends Command
      */
     protected $description = 'Removes images from the storage that are not in the database';
 
-    /**
-     * Execute the console command.
-     */
+    /** Execute the console command. */
     public function handle(): void
     {
         // Get all image paths from storage
@@ -44,7 +42,6 @@ class CleanOrphanedImages extends Command
 
         // Get all image paths from the database (both original and resized)
         $dbImagePaths = ProductImage::select(['image_path', 'resized_image_path', 'show_image_path', 'thumbnail_image_path'])->get()->toArray();
-
 
         $allDbImagePaths = array_unique(Arr::flatten($dbImagePaths));
 
@@ -55,6 +52,6 @@ class CleanOrphanedImages extends Command
         Storage::disk('public')->delete($orphanedImages);
 
         $orphanedImagesCount = count($orphanedImages);
-        $this->info("Orphaned images cleaned successfully. Total: $orphanedImagesCount");
+        $this->info("Orphaned images cleaned successfully. Total: {$orphanedImagesCount}");
     }
 }

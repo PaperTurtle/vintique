@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Product;
-use App\Models\ProductImage;
+use App\Models\{Product, ProductImage};
 
 it('belongs to a product', function () {
     $product = Product::factory()->create();
@@ -10,9 +9,8 @@ it('belongs to a product', function () {
     expect($productImage->product)->toBeInstanceOf(Product::class);
 });
 
-
 it('has correct fillable attributes', function () {
-    $productImage = new ProductImage();
+    $productImage = new ProductImage;
 
     expect($productImage->getFillable())->toBe([
         'product_id',
@@ -20,12 +18,12 @@ it('has correct fillable attributes', function () {
         'alt_text',
         "resized_image_path",
         "show_image_path",
-        "thumbnail_image_path"
+        "thumbnail_image_path",
     ]);
 });
 
 it('has correct casts', function () {
-    $productImage = new ProductImage();
+    $productImage = new ProductImage;
 
     expect($productImage->getCasts())->toHaveKey('created_at', 'datetime');
     expect($productImage->getCasts())->toHaveKey('updated_at', 'datetime');

@@ -1,15 +1,7 @@
 <?php
 
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FaqController;
-use App\Http\Controllers\ReviewController;
-use App\Http\Middleware\EnsureCartIsNotEmpty;
-use App\Http\Middleware\EnsureUserIsArtisan;
-use App\Http\Middleware\RedirectIfNoTransactionDetails;
+use App\Http\Controllers\{CheckoutController, ContactController, DashboardController, ProductController, ProfileController, ReviewController};
+use App\Http\Middleware\{EnsureCartIsNotEmpty, EnsureUserIsArtisan, RedirectIfNoTransactionDetails};
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,22 +22,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [ProductController::class, 'topRatedProducts'])->name('home');
 
 // Static pages
-Route::get('about-us', function () {
-    return view('about-us');
-})->name('about-us');
-Route::get('jobs', function () {
-    return view('jobs');
-})->name('jobs');
-Route::get('accessibility', function () {
-    return view('accessibility');
-})->name('accessibility');
-Route::get('partners', function () {
-    return view('partners');
-})->name('partners');
+
+Route::view('about-us', 'about-us')->name('about-us');
+Route::view('jobs', 'jobs')->name('jobs');
+Route::view('accessibility', 'accessibility')->name('accessibility');
+Route::view('partners', 'partners')->name('partners');
 
 Route::prefix("contact-us")->group(function () {
     Route::get('/', function () {
-        return view('contact-us');
+        return \view('contact-us');
     })->name('contact-us');
     Route::post('/', [ContactController::class, "sendEmail"]);
 })->name('contact-us');
@@ -72,8 +57,7 @@ Route::prefix('products')->group(function () {
     });
 });
 
-// FAQ routes
-Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
+Route::view("/faq", "faq.index")->name("faq");
 
 // ========= Authentication Required Routes =========
 Route::middleware('auth')->group(function () {
@@ -96,8 +80,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::get('/process', [CheckoutController::class, 'process'])->name('checkout.process')->middleware(EnsureCartIsNotEmpty::class);
         Route::post('/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
-        Route::get('/success', [CheckoutController::class, 'success'])->name('checkout.success')
-            ->middleware(RedirectIfNoTransactionDetails::class);
+
+        Route::view('/success', 'checkout.success')->name('checkout.success')->middleware(RedirectIfNoTransactionDetails::class);
     });
 
     // Profile routes
@@ -119,23 +103,25 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix("email")->group(function () {
         Route::get('/verify', function () {
-            return view('auth.verify-email');
+            return \view('auth.verify-email');
         })->middleware('auth')->name('verification.notice');
 
         Route::get('/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
             $request->fulfill();
-            return redirect('/dashboard');
+
+            return \redirect('/dashboard');
         })->middleware(['auth', 'signed'])->name('verification.verify');
 
         Route::post('/verification-notification', function (Request $request) {
             $request->user()->sendEmailVerificationNotification();
-            return back()->with('message', 'Verification link sent!');
+
+            return \back()->with('message', 'Verification link sent!');
         })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
     });
 });
 
 Route::fallback(function () {
-    return redirect('/')->with('error', 'The requested page is not available.');
+    return \redirect('/')->with('error', 'The requested page is not available.');
 });
 
 // ========= Authentication Routes (Laravel Breeze) =========

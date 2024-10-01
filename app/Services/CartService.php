@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Product;
-use App\Models\ShoppingCart;
-use Illuminate\Support\Facades\Auth;
+use App\Models\{Product, ShoppingCart};
 
 /**
  * CartService is responsible for managing the shopping cart functionality.
@@ -17,22 +15,18 @@ class CartService
      * It checks if the product is already in the cart for the current user.
      * If it is, it updates the quantity; if not, it creates a new cart item.
      *
-     * @param int $productId The ID of the product to add to the cart.
-     * @param int $quantity The quantity of the product to add.
-     * @return array Returns a success message upon successful addition.
+     * @param  int   $productId the ID of the product to add to the cart
+     * @param  int   $quantity  the quantity of the product to add
+     * @return array returns a success message upon successful addition
      */
     public function addToCart(int $productId, int $quantity): array
     {
-        $product = Product::find($productId);
-        if (!$product) {
-            return ['error' => 'Product not found'];
-        }
+        $product = Product::findOrFail($productId);
 
-        $cartItem = ShoppingCart::where('user_id', Auth::id())
-            ->where('product_id', $productId)
-            ->first();
+        $cartItem = auth()->user()->cart()->where('product_id', $productId)->first();
 
         $isNewItem = false;
+
         if ($cartItem) {
             // Check if adding the quantity exceeds the available quantity
             if (($cartItem->quantity + $quantity) > $product->quantity) {
@@ -45,7 +39,7 @@ class CartService
                 return ['error' => 'Requested quantity exceeds available stock'];
             }
             $cartItem = ShoppingCart::create([
-                'user_id' => Auth::id(),
+                'user_id' => auth()->id(),
                 'product_id' => $productId,
                 'quantity' => $quantity,
             ]);
@@ -53,6 +47,7 @@ class CartService
         }
 
         $cartItem->save();
+
         return ['success' => 'Product added to cart!', 'isNewItem' => $isNewItem];
     }
 }

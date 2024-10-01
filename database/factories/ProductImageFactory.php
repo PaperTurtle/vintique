@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\ProductImage;
+use App\Models\{Product, ProductImage};
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductImageFactory extends Factory
@@ -12,7 +12,7 @@ class ProductImageFactory extends Factory
     public function definition()
     {
         return [
-            'product_id' => \App\Models\Product::factory(),
+            'product_id' => Product::factory(),
             'image_path' => $this->faker->imageUrl(),
             'resized_image_path' => $this->faker->imageUrl(),
             'show_image_path' => $this->faker->imageUrl(),

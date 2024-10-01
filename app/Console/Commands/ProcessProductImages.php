@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Storage;
  */
 class ProcessProductImages extends Command
 {
+    public const TYPE_DEFAULT = 'default';
+
+    public const TYPE_SHOW = 'show';
+
+    public const TYPE_THUMBNAIL = 'thumbnail';
+
     /**
      * The name and signature of the console command.
      *
@@ -31,20 +37,14 @@ class ProcessProductImages extends Command
      */
     protected $description = 'Process product images to create resized and show versions';
 
-
-    const TYPE_DEFAULT = 'default';
-    const TYPE_SHOW = 'show';
-    const TYPE_THUMBNAIL = 'thumbnail';
-    /**
-     * Execute the console command.
-     */
+    /** Execute the console command. */
     public function handle(): void
     {
         $originalImages = Storage::disk('public')->files('product_images');
 
         foreach ($originalImages as $imagePath) {
             if (str_ends_with($imagePath, '_original.webp')) {
-                $this->info("Processing $imagePath");
+                $this->info("Processing {$imagePath}");
 
                 $this->processImageIfNotExists($imagePath, '_resized', self::TYPE_DEFAULT);
                 $this->processImageIfNotExists($imagePath, '_show', self::TYPE_SHOW);
@@ -67,10 +67,9 @@ class ProcessProductImages extends Command
     /**
      * Process an image using a Node.js script to create resized or show versions.
      *
-     * @param string $sourcePath The source image file path.
-     * @param string $targetPath The target image file path to store the processed image.
-     * @param string $type The type of processing to apply (default, show, or thumbnail).
-     * @return void
+     * @param string $sourcePath the source image file path
+     * @param string $targetPath the target image file path to store the processed image
+     * @param string $type       the type of processing to apply (default, show, or thumbnail)
      */
     protected function processImage(string $sourcePath, string $targetPath, string $type = self::TYPE_DEFAULT): void
     {
@@ -80,19 +79,20 @@ class ProcessProductImages extends Command
             default => 'imageProcessor.js',
         };
 
-        $nodeCommand = "node " . escapeshellarg(base_path("resources/js/$nodeScript")) . " " .
-            escapeshellarg(storage_path("app/public/$sourcePath")) . " " .
-            escapeshellarg(storage_path("app/public/$targetPath"));
+        $nodeCommand = "node " . escapeshellarg(base_path("resources/js/{$nodeScript}")) . " " .
+            escapeshellarg(storage_path("app/public/{$sourcePath}")) . " " .
+            escapeshellarg(storage_path("app/public/{$targetPath}"));
 
         $output = null;
         $returnVar = null;
         exec($nodeCommand, $output, $returnVar);
 
         if ($returnVar !== 0) {
-            $this->error("Failed to process $targetPath using $nodeScript");
+            $this->error("Failed to process {$targetPath} using {$nodeScript}");
+
             return;
         }
 
-        $this->info("Processed $targetPath using $nodeScript");
+        $this->info("Processed {$targetPath} using {$nodeScript}");
     }
 }

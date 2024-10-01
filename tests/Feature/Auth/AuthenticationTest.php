@@ -3,7 +3,6 @@
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 
-
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 

@@ -14,7 +14,7 @@ class FaqController extends Controller
      * Display the FAQ page.
      * This method returns the view that contains the FAQ content.
      *
-     * @return Factory|View Returns the FAQ view.
+     * @return Factory|View returns the FAQ view
      */
     public function index(): Factory|View
     {

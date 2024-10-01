@@ -5,11 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use App\Services\ImageService;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\{RedirectResponse, Request};
+use Illuminate\Support\Facades\{Auth, Redirect, Storage};
 use Illuminate\View\View;
 
 /**
@@ -29,12 +26,13 @@ class ProfileController extends Controller
      * Display the user's profile.
      * This method returns the view for the user's profile with the user data.
      *
-     * @param int $userID The ID of the user whose profile is being displayed.
-     * @return View Returns the view for the user's profile with the user data.
+     * @param  int  $userID the ID of the user whose profile is being displayed
+     * @return View returns the view for the user's profile with the user data
      */
     public function show(int $userID): View
     {
         $user = User::findOrFail($userID);
+
         return view('profile.show', ['user' => $user]);
     }
 
@@ -42,20 +40,20 @@ class ProfileController extends Controller
      * Display the user's profile form for editing.
      * This method returns the view for the user to edit their profile information.
      *
-     * @param int $userID
-     * @return View Returns the view for editing the user's profile with the user data.
+     * @return View returns the view for editing the user's profile with the user data
      */
     public function edit(int $userID): View
     {
         $user = User::findOrFail($userID);
         $profilePictureUrl = '';
+
         if ($user->profile->profile_picture) {
             $profilePictureUrl = Storage::url($user->profile->profile_picture);
         }
 
         return view('profile.edit', [
             'user' => $user,
-            'profilePictureUrl' => $profilePictureUrl
+            'profilePictureUrl' => $profilePictureUrl,
         ]);
     }
 
@@ -65,9 +63,9 @@ class ProfileController extends Controller
      * If the email is changed, it resets the email verification status.
      * It returns a redirect response to the profile edit page with a status message.
      *
-     * @param ProfileUpdateRequest $request The request instance containing validated profile data.
-     * @param int $userID The ID of the user whose profile is being updated.
-     * @return RedirectResponse Returns a redirect response to the profile edit page with a status message.
+     * @param  ProfileUpdateRequest $request the request instance containing validated profile data
+     * @param  int                  $userID  the ID of the user whose profile is being updated
+     * @return RedirectResponse     returns a redirect response to the profile edit page with a status message
      */
     public function update(ProfileUpdateRequest $request, int $userID): RedirectResponse
     {
@@ -81,7 +79,7 @@ class ProfileController extends Controller
         if ($request->hasFile('profile_picture')) {
             $path = $this->imageService->processAndStoreProfilePicture(
                 $request->file('profile_picture'),
-                $user->profile->profile_picture ?? ''
+                $user->profile->profile_picture ?? '',
             );
 
             $user->profile->profile_picture = $path;
@@ -99,9 +97,9 @@ class ProfileController extends Controller
      * This method deletes the authenticated user's account after validating the provided password.
      * It logs out the user, invalidates the session, and redirects to the home page.
      *
-     * @param Request $request The current request instance.
-     * @param int $userID The ID of the user whose account is being deleted.
-     * @return RedirectResponse Returns a redirect response to the home page after account deletion.
+     * @param  Request          $request the current request instance
+     * @param  int              $userID  the ID of the user whose account is being deleted
+     * @return RedirectResponse returns a redirect response to the home page after account deletion
      */
     public function destroy(Request $request, int $userID): RedirectResponse
     {

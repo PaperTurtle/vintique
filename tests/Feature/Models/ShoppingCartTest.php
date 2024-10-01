@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Product;
-use App\Models\ShoppingCart;
-use App\Models\User;
+use App\Models\{Product, ShoppingCart, User};
 
 it('belongs to a user', function () {
     $user = User::factory()->create();
@@ -19,7 +17,7 @@ it('belongs to a product', function () {
 });
 
 it('has correct fillable attributes', function () {
-    $cartItem = new ShoppingCart();
+    $cartItem = new ShoppingCart;
 
     expect($cartItem->getFillable())->toBe([
         'user_id',
@@ -32,12 +30,11 @@ it('calculates total price correctly', function () {
     $product = Product::factory()->create(['price' => 100.00]);
     $cartItem = ShoppingCart::factory()->create([
         'product_id' => $product->id,
-        'quantity' => 2
+        'quantity' => 2,
     ]);
 
     expect($cartItem->total_price)->toBe(200.00);
 });
-
 
 it('can be created', function () {
     $cartItem = ShoppingCart::create([

@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\ShoppingCart;
-use App\Models\User;
-use App\Models\Product;
+use App\Models\{Product, ShoppingCart, User};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

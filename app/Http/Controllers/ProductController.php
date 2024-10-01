@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\{StoreProductRequest, UpdateProductRequest};
+use App\Models\{Product, ProductImage};
+use App\Services\{ImageService, ProductQueryService};
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use App\Models\Product;
-use App\Models\ProductImage;
-use App\Services\ImageService;
-use App\Services\ProductQueryService;
-use Illuminate\Http\Request;
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\View\View;
 
 /**
@@ -21,34 +16,16 @@ use Illuminate\View\View;
  */
 class ProductController extends Controller
 {
-    const MAX_IMAGES = 4; // Maximum number of images allowed per product
+    public const MAX_IMAGES = 4; // Maximum number of images allowed per product
 
-    /**
-     * @var ImageService
-     */
-    protected ImageService $imageService;
-
-    /**
-     * @var ProductQueryService
-     */
-    protected ProductQueryService $productQueryService;
-    /**
-     * ProductController constructor.
-     *
-     * @param ImageService $imageService Service for handling image-related operations.
-     */
-    public function __construct(ImageService $imageService, ProductQueryService $productQueryService)
-    {
-        $this->imageService = $imageService;
-        $this->productQueryService = $productQueryService;
-    }
+    public function __construct(protected ImageService $imageService, protected ProductQueryService $productQueryService) {}
 
     /**
      * Display a listing of all products.
      * This method retrieves all products from the database and passes them to the products index view.
      *
-     * @param Request $request The request object containing the fetched product data.
-     * @return Factory|View Returns a view with a list of all products.
+     * @param  Request      $request the request object containing the fetched product data
+     * @return Factory|View returns a view with a list of all products
      */
     public function index(Request $request): Factory|View
     {
@@ -68,15 +45,14 @@ class ProductController extends Controller
      * Display a specific product.
      * This method returns the view for displaying detailed information about a specific product.
      *
-     * @param Product $product The product instance to display.
-     * @return Factory|View Returns a view with the specified product details.
+     * @param  Product      $product the product instance to display
+     * @return Factory|View returns a view with the specified product details
      */
     public function show(Product $product): Factory|View
     {
         $product->load(['reviews' => function ($query) {
             $query->orderBy('created_at', 'desc')->with('user.profile');
         }]);
-
 
         return view('products.show', [
             'product' => $product,
@@ -89,12 +65,14 @@ class ProductController extends Controller
      * Show the form for creating a new product.
      * This method returns the view for creating a new product.
      *
-     * @return Factory|View Returns a view for creating a new product.
      * @throws AuthorizationException
+     *
+     * @return Factory|View returns a view for creating a new product
      */
     public function create(): Factory|View
     {
         $this->authorize('create', Product::class);
+
         return view('products.create');
     }
 
@@ -103,9 +81,11 @@ class ProductController extends Controller
      * This method validates and stores a new product in the database, along with its images.
      * It returns a JSON response with the result of the operation.
      *
-     * @param StoreProductRequest $request The request object containing product data.
-     * @return RedirectResponse Returns JSON response with the status of product creation.
+     * @param StoreProductRequest $request the request object containing product data
+     *
      * @throws AuthorizationException
+     *
+     * @return RedirectResponse returns JSON response with the status of product creation
      */
     public function store(StoreProductRequest $request): RedirectResponse
     {
@@ -124,9 +104,11 @@ class ProductController extends Controller
      * Show the form for editing an existing product.
      * This method returns the view for editing an existing product if the authenticated user is authorized.
      *
-     * @param Product $product The product instance to edit.
-     * @return Factory|View Returns a view for editing the specified product.
+     * @param Product $product the product instance to edit
+     *
      * @throws AuthorizationException
+     *
+     * @return Factory|View returns a view for editing the specified product
      */
     public function edit(Product $product): Factory|View
     {
@@ -140,10 +122,12 @@ class ProductController extends Controller
      * This method validates and updates the given product in the database.
      * It returns a redirect response to the updated product's page.
      *
-     * @param UpdateProductRequest $request The request object containing updated product data.
-     * @param Product $product The product instance to update.
-     * @return RedirectResponse Returns a redirect response to the product's detail page.
+     * @param UpdateProductRequest $request the request object containing updated product data
+     * @param Product              $product the product instance to update
+     *
      * @throws AuthorizationException
+     *
+     * @return RedirectResponse returns a redirect response to the product's detail page
      */
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
@@ -154,21 +138,22 @@ class ProductController extends Controller
 
         if ($request->hasFile('images')) {
             $currentImageCount = $product->images()->count();
-            $allowedNewImages = ProductController::MAX_IMAGES - $currentImageCount;
+            $allowedNewImages = self::MAX_IMAGES - $currentImageCount;
 
             if ($allowedNewImages > 0) {
                 $images = array_slice($request->file('images'), 0, $allowedNewImages);
                 $this->imageService->processAndStoreImages($product, $images, $validatedData['description']);
             }
         }
+
         return redirect()->route('products.show', $product->id)->with('success', 'Product updated successfully.');
     }
 
     /**
      * Remove the specified product from the database.
      *
-     * @param Product $product The product instance to delete.
-     * @return RedirectResponse
+     * @param Product $product the product instance to delete
+     *
      * @throws AuthorizationException
      */
     public function destroy(Product $product): RedirectResponse
@@ -185,10 +170,12 @@ class ProductController extends Controller
      * This method deletes a specified product image if the authenticated user is authorized.
      * It returns a JSON response with the result of the deletion operation.
      *
-     * @param Product $product The product owning the image.
-     * @param ProductImage $productImage The product image to be deleted.
-     * @return JsonResponse Returns JSON response with the status of image deletion.
+     * @param Product      $product      the product owning the image
+     * @param ProductImage $productImage the product image to be deleted
+     *
      * @throws AuthorizationException
+     *
+     * @return JsonResponse returns JSON response with the status of image deletion
      */
     public function destroyImage(Product $product, ProductImage $productImage): JsonResponse
     {
@@ -198,7 +185,7 @@ class ProductController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Image deleted successfully.'
+            'message' => 'Image deleted successfully.',
         ]);
     }
 
@@ -206,7 +193,7 @@ class ProductController extends Controller
      * Retrieve and display the top three rated products.
      * This method fetches the top three products based on their average ratings.
      *
-     * @return Factory|View Returns a view with the top three rated products.
+     * @return Factory|View returns a view with the top three rated products
      */
     public function topRatedProducts(): Factory|View
     {

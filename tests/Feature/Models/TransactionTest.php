@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Transaction;
-use App\Models\User;
-use App\Models\Product;
+use App\Models\{Product, Transaction, User};
 
 it('belongs to a buyer', function () {
     $user = User::factory()->create();
@@ -19,7 +17,7 @@ it('belongs to a product', function () {
 });
 
 it('has correct fillable attributes', function () {
-    $transaction = new Transaction();
+    $transaction = new Transaction;
 
     expect($transaction->getFillable())->toBe([
         'buyer_id',
@@ -31,7 +29,7 @@ it('has correct fillable attributes', function () {
 });
 
 it('has correct casts', function () {
-    $transaction = new Transaction();
+    $transaction = new Transaction;
 
     expect($transaction->getCasts())->toHaveKey('total_price', 'decimal:2');
     expect($transaction->getCasts())->toHaveKey('created_at', 'datetime');
@@ -42,7 +40,7 @@ it('can be created', function () {
     $transaction = Transaction::factory()->create([
         'quantity' => 2,
         'total_price' => 200.00,
-        'status' => 'completed'
+        'status' => 'completed',
     ]);
 
     $this->assertDatabaseHas('transactions', [

@@ -19,7 +19,7 @@ class DashboardController extends Controller
      * Retrieves transactions associated with the products of the authenticated user, typically an artisan,
      * and passes them to the dashboard view.
      *
-     * @return Factory|View Returns a view of the dashboard with transaction details.
+     * @return Factory|View returns a view of the dashboard with transaction details
      */
     public function index(): Factory|View
     {
@@ -31,6 +31,7 @@ class DashboardController extends Controller
             ->get()
             ->map(function ($transaction) {
                 $transaction->delivered_on = $transaction->updated_at->format('F j, Y'); // format date
+
                 return $transaction;
             })
             ->groupBy(function ($transaction) {
@@ -45,8 +46,8 @@ class DashboardController extends Controller
      * Updates the status of a transaction to 'sent' if the authenticated user (an artisan) is authorized to do so.
      * Responds with JSON indicating the success or unauthorized access of the operation.
      *
-     * @param Transaction $transaction The transaction to be marked as sent.
-     * @return JsonResponse Returns JSON response with a success message or an unauthorized access message.
+     * @param  Transaction  $transaction the transaction to be marked as sent
+     * @return JsonResponse returns JSON response with a success message or an unauthorized access message
      */
     public function markAsSent(Transaction $transaction): JsonResponse
     {

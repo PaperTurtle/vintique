@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Product;
-use App\Models\Review;
-use App\Models\User;
+use App\Models\{Product, Review, User};
 
 it('belongs to a product', function () {
     $product = Product::factory()->create();
@@ -19,7 +17,7 @@ it('belongs to a user', function () {
 });
 
 it('has correct fillable attributes', function () {
-    $review = new Review();
+    $review = new Review;
 
     expect($review->getFillable())->toBe([
         'product_id',
@@ -30,7 +28,7 @@ it('has correct fillable attributes', function () {
 });
 
 it('has correct casts', function () {
-    $review = new Review();
+    $review = new Review;
 
     expect($review->getCasts())->toHaveKey('created_at', 'datetime');
     expect($review->getCasts())->toHaveKey('updated_at', 'datetime');

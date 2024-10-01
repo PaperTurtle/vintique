@@ -2,13 +2,11 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Attachment;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\{Address, Attachment, Content, Envelope};
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
@@ -18,35 +16,22 @@ use Illuminate\Support\Facades\Log;
  */
 class SendOrderConfirmation extends Mailable
 {
-    /**
-     * @var mixed The user to whom the order confirmation will be sent.
-     */
-    public mixed $user;
-
-    /**
-     * @var array The details of the transaction related to the order.
-     */
-    public array $transactionDetails;
-
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new message instance.
      *
-     * @param mixed $user The user instance.
-     * @param array $transactionDetails Details of the transaction.
+     * @param User  $user               the user instance
+     * @param array $transactionDetails details of the transaction
      */
-    public function __construct(mixed $user, array $transactionDetails)
-    {
-        $this->user = $user;
-        $this->transactionDetails = $transactionDetails;
-    }
+    public function __construct(private User $user, private array $transactionDetails) {}
 
     /**
      * Get the message envelope.
      * Defines the sender and the subject of the email.
      *
-     * @return Envelope Returns an Envelope instance with sender and subject details.
+     * @return Envelope returns an Envelope instance with sender and subject details
      */
     public function envelope(): Envelope
     {
@@ -60,7 +45,7 @@ class SendOrderConfirmation extends Mailable
      * Get the message content definition.
      * Determines the view and data to be used in the email content.
      *
-     * @return Content Returns a Content instance specifying the view and data for the email.
+     * @return Content returns a Content instance specifying the view and data for the email
      */
     public function content(): Content
     {
@@ -75,21 +60,23 @@ class SendOrderConfirmation extends Mailable
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, Attachment> Returns an array of attachments.
+     * @return array<int, Attachment> returns an array of attachments
      */
     public function attachments(): array
     {
         $pdfPath = $this->generatePdf();
+
         return [
             Attachment::fromPath($pdfPath)
                 ->as('order-confirmation.pdf')
                 ->withMime('application/pdf'),
         ];
     }
+
     /**
      * Generates a PDF file using the dompdf library.
      *
-     * @return string The file path of the generated PDF file.
+     * @return string the file path of the generated PDF file
      */
     public function generatePdf(): string
     {

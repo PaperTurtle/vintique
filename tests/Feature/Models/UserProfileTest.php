@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\User;
-use App\Models\UserProfile;
+use App\Models\{User, UserProfile};
 
 it('belongs to a user', function () {
     $user = User::factory()->create();
@@ -10,9 +9,8 @@ it('belongs to a user', function () {
     expect($userProfile->user)->toBeInstanceOf(User::class);
 });
 
-
 it('has correct fillable attributes', function () {
-    $userProfile = new UserProfile();
+    $userProfile = new UserProfile;
 
     expect($userProfile->getFillable())->toBe([
         'user_id',
@@ -20,7 +18,6 @@ it('has correct fillable attributes', function () {
         'profile_picture',
     ]);
 });
-
 
 it('can be created', function () {
     $userProfile = UserProfile::factory()->create([

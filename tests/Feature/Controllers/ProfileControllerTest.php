@@ -18,7 +18,6 @@ it('updates user profile information', function () {
         'id' => $user->id,
         'name' => 'New Name',
         'email' => 'newemail@example.com',
-
     ]);
 });
 

@@ -1,10 +1,6 @@
 <?php
 
-use App\Models\Product;
-use App\Models\User;
-use App\Models\Category;
-use App\Models\ProductImage;
-use App\Models\Review;
+use App\Models\{Category, Product, ProductImage, Review, User};
 
 it('belongs to an artisan', function () {
     $artisan = User::factory()->create();
@@ -37,7 +33,7 @@ it('has many reviews', function () {
 });
 
 it('has correct fillable attributes', function () {
-    $product = new Product();
+    $product = new Product;
 
     expect($product->getFillable())->toBe([
         'artisan_id',
@@ -50,7 +46,7 @@ it('has correct fillable attributes', function () {
 });
 
 it('has correct casts', function () {
-    $product = new Product();
+    $product = new Product;
 
     expect($product->getCasts())->toHaveKey('price', 'decimal:2');
     expect($product->getCasts())->toHaveKey('created_at', 'datetime');

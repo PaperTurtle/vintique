@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Product;
-use App\Models\Review;
-use App\Models\User;
+use App\Models\{Product, Review, User};
 
 it('stores a new review', function () {
     $user = User::factory()->create();

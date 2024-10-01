@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
-use App\Models\UserProfile;
+use App\Models\{User, UserProfile};
 use Illuminate\Console\Command;
 
 /**
@@ -48,7 +47,7 @@ class CreateUserProfile extends Command
                 'user_id' => $user->id,
             ]);
 
-            $this->info("Created profile for user: $user->id");
+            $this->info("Created profile for user: {$user->id}");
         }
 
         $this->info('All missing user profiles have been created.');

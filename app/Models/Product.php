@@ -2,28 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Represents a product in the application.
- *
- * @property int $id Unique identifier for the product.
- * @property int $artisan_id Foreign key referencing the user who created the product.
- * @property int $category_id Foreign key referencing the category of the product.
- * @property string $name Name of the product.
- * @property string $description Description of the product.
- * @property float $price Price of the product, stored as a decimal with two digits after the decimal point.
- * @property int $quantity Quantity of the product available.
- * @property Carbon $created_at Timestamp when the product was created.
- * @property Carbon $updated_at Timestamp when the product was last updated.
- *
- * @package App\Models
- */
 class Product extends Model
 {
     use HasFactory;
@@ -55,8 +38,6 @@ class Product extends Model
 
     /**
      * Define the relationship with the artisan who created the product.
-     *
-     * @return BelongsTo
      */
     public function artisan(): BelongsTo
     {
@@ -65,8 +46,6 @@ class Product extends Model
 
     /**
      * Define the relationship with the category to which the product belongs.
-     *
-     * @return BelongsTo
      */
     public function category(): BelongsTo
     {
@@ -75,8 +54,6 @@ class Product extends Model
 
     /**
      * Define the relationship with product images.
-     *
-     * @return HasMany
      */
     public function images(): HasMany
     {
@@ -85,8 +62,6 @@ class Product extends Model
 
     /**
      * Define the relationship with product reviews.
-     *
-     * @return HasMany
      */
     public function reviews(): HasMany
     {
@@ -95,9 +70,6 @@ class Product extends Model
 
     /**
      * Checks if a specific user has already reviewed the product.
-     *
-     * @param int $userId
-     * @return bool
      */
     public function hasUserReviewed(int $userId): bool
     {
@@ -106,18 +78,14 @@ class Product extends Model
 
     /**
      * Calculates and returns the average rating of the product based on its reviews.
-     *
-     * @return float|null
      */
-    public function averageRating(): float|null
+    public function averageRating(): ?float
     {
         return $this->reviews()->avg('rating');
     }
 
     /**
      * Returns the total number of reviews made for the product.
-     *
-     * @return int
      */
     public function totalReviews(): int
     {
@@ -126,8 +94,6 @@ class Product extends Model
 
     /**
      * Checks if the product is in the current user's shopping cart.
-     *
-     * @return bool
      */
     public function isInUserCart(): bool
     {

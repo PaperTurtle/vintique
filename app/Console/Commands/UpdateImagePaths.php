@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\ProductImage;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Storage;
  */
 class UpdateImagePaths extends Command
 {
+    public const CHUNK_SIZE = 100;
+
     /**
      * The name and signature of the console command.
      *
@@ -32,13 +34,9 @@ class UpdateImagePaths extends Command
      */
     protected $description = 'Updates the database with paths for show, resized, and thumbnail images.';
 
-    const CHUNK_SIZE = 100;
-
     /**
      * Execute the console command.
      * Iterates through different image types and updates their paths in the database.
-     *
-     * @return void
      */
     public function handle(): void
     {
@@ -61,20 +59,20 @@ class UpdateImagePaths extends Command
             $query->whereNull($columnName)->orWhere($columnName, '');
         })->count();
 
-        $this->info("Found $imagesCount images with null or empty $type image path.");
+        $this->info("Found {$imagesCount} images with null or empty {$type} image path.");
 
         ProductImage::where(function ($query) use ($columnName) {
             $query->whereNull($columnName)->orWhere($columnName, '');
         })->chunk(self::CHUNK_SIZE, function ($images) use ($columnName, $type) {
             foreach ($images as $image) {
-                $path = str_replace('_original', "_$type", $image->image_path);
+                $path = str_replace('_original', "_{$type}", $image->image_path);
 
                 if (Storage::disk('public')->exists($path)) {
-                    $image->$columnName = $path;
+                    $image->{$columnName} = $path;
                     $image->save();
-                    $this->info("$type path updated for image: $image->id");
+                    $this->info("{$type} path updated for image: {$image->id}");
                 } else {
-                    $this->error("$type image does not exist for image: $image->id");
+                    $this->error("{$type} image does not exist for image: {$image->id}");
                 }
             }
         });

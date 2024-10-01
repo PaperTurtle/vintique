@@ -2,21 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Represents a product category in the application.
  *
- * @property int $id Unique identifier for the category.
- * @property string $name Name of the category.
+ * @property int         $id          Unique identifier for the category.
+ * @property string      $name        Name of the category.
  * @property string|null $description Description of the category. Can be null.
- * @property Carbon $created_at Timestamp when the category was created.
- * @property Carbon $updated_at Timestamp when the category was last updated.
- *
- * @package App\Models
+ * @property Carbon      $created_at  Timestamp when the category was created.
+ * @property Carbon      $updated_at  Timestamp when the category was last updated.
  */
 class Category extends Model
 {
@@ -45,8 +43,6 @@ class Category extends Model
 
     /**
      * Define the relationship with products.
-     *
-     * @return HasMany
      */
     public function products(): HasMany
     {

@@ -16,11 +16,6 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Product' => 'App\Policies\ProductPolicy',
     ];
 
-    /**
-     * Register any authentication / authorization services.
-     */
-    public function boot(): void
-    {
-        //
-    }
+    /** Register any authentication / authorization services. */
+    public function boot(): void {}
 }

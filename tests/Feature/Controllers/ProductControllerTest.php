@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Product;
-use App\Models\User;
+use App\Models\{Product, User};
 use Illuminate\Http\UploadedFile;
 
 it('stores a new product', function () {
@@ -30,7 +29,7 @@ it('updates a product', function () {
     $response->assertRedirect(route('products.show', $product));
     $this->assertDatabaseHas('products', [
         'id' => $product->id,
-        ...$updatedData
+        ...$updatedData,
     ]);
 });
 

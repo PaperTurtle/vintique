@@ -2,25 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Represents a transaction in the system, linking a buyer (user) and a product, along with the quantity, total price, and status of the transaction.
- *
- * @property int $id Unique identifier for the transaction.
- * @property int $buyer_id Foreign key referencing the user who is the buyer in the transaction.
- * @property int $product_id Foreign key referencing the product involved in the transaction.
- * @property int $quantity The quantity of the product involved in the transaction.
- * @property float $total_price Total price of the transaction, stored as a decimal with two digits after the decimal point.
- * @property string $status The status of the transaction (e.g., pending, completed).
- * @property Carbon $created_at Timestamp when the transaction was created.
- * @property Carbon $updated_at Timestamp when the transaction was last updated.
- *
- * @package App\Models
- */
 class Transaction extends Model
 {
     use HasFactory;
@@ -51,8 +36,6 @@ class Transaction extends Model
 
     /**
      * Get the buyer that made the transaction.
-     *
-     * @return BelongsTo
      */
     public function buyer(): BelongsTo
     {
@@ -61,8 +44,6 @@ class Transaction extends Model
 
     /**
      * Get the buyer details associated with the transaction.
-     *
-     * @return BelongsTo
      */
     public function transactionBuyer(): BelongsTo
     {
@@ -71,8 +52,6 @@ class Transaction extends Model
 
     /**
      * Get the product that was transacted.
-     *
-     * @return BelongsTo
      */
     public function product(): BelongsTo
     {

@@ -11,8 +11,17 @@ class Buyer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'transaction_id', 'email', 'phone_number', 'first_name', 'last_name',
-        'address', 'city', 'country', 'state_province', 'postal_code', 'delivery_method'
+        'transaction_id',
+        'email',
+        'phone_number',
+        'first_name',
+        'last_name',
+        'address',
+        'city',
+        'country',
+        'state_province',
+        'postal_code',
+        'delivery_method',
     ];
 
     public function transaction(): BelongsTo

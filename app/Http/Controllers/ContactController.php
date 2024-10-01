@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactMail;
 use Dotenv\Exception\ValidationException;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\{JsonResponse, Request};
+use Illuminate\Support\Facades\Mail;
 
 /**
  * ContactController handles the operations related to sending emails from contact forms.
@@ -19,26 +18,28 @@ class ContactController extends Controller
      * Validates the incoming request data to ensure all necessary fields are provided and properly formatted.
      * After validation, prepares the data and sends an email to the Handpickd email.
      *
-     * @param Request $request The incoming request containing contact form data.
-     * @return JsonResponse Returns a JSON response indicating the success of the email operation.
-     * @throws ValidationException If the request data does not pass validation checks.
+     * @param Request $request the incoming request containing contact form data
+     *
+     * @throws ValidationException if the request data does not pass validation checks
+     *
+     * @return JsonResponse returns a JSON response indicating the success of the email operation
      */
     public function sendEmail(Request $request): JsonResponse
     {
         // Validate the request data
         $validatedData = $request->validate([
             'first-name' => 'required',
-            'last-name'  => 'required',
-            'email'      => 'required|email',
-            'message'    => 'required',
+            'last-name' => 'required',
+            'email' => 'required|email',
+            'message' => 'required',
         ]);
 
         // Prepare the data for the email
         $data = [
             'firstName' => $validatedData['first-name'],
-            'lastName'  => $validatedData['last-name'],
-            'email'     => $validatedData['email'],
-            'message'   => $validatedData['message'],
+            'lastName' => $validatedData['last-name'],
+            'email' => $validatedData['email'],
+            'message' => $validatedData['message'],
         ];
 
         // Send the email

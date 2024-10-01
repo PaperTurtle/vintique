@@ -2,24 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Represents a review made by a user for a product.
- *
- * @property int $id Unique identifier for the review.
- * @property int $product_id Foreign key referencing the product being reviewed.
- * @property int $user_id Foreign key referencing the user who created the review.
- * @property int $rating Rating given by the user, typically on a scale of 1 to 5.
- * @property string|null $review Text of the review. Can be null.
- * @property Carbon $created_at Timestamp when the review was created.
- * @property Carbon $updated_at Timestamp when the review was last updated.
- *
- * @package App\Models
- */
 class Review extends Model
 {
     use HasFactory;
@@ -49,8 +35,6 @@ class Review extends Model
 
     /**
      * Define the relationship with the product being reviewed.
-     *
-     * @return BelongsTo
      */
     public function product(): BelongsTo
     {
@@ -59,8 +43,6 @@ class Review extends Model
 
     /**
      * Define the relationship with the user who made the review.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {

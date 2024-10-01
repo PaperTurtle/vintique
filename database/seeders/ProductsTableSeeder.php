@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Product;
+use Illuminate\Database\Seeder;
 
 class ProductsTableSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class ProductsTableSeeder extends Seeder
             ['artisan_id' => 21, 'category_id' => 5, 'name' => 'Artisanal Scented Candles', 'description' => 'Soothing scented candles made with natural ingredients.', 'price' => 19.99, 'quantity' => 30],
             ['artisan_id' => 21, 'category_id' => 6, 'name' => 'Hand-painted Canvas Art', 'description' => 'Abstract canvas art, perfect for decorating any room.', 'price' => 89.99, 'quantity' => 5],
             ['artisan_id' => 27, 'category_id' => 7, 'name' => 'Personalized Jewelry Box', 'description' => 'An elegant, personalized jewelry box for your treasures.', 'price' => 49.99, 'quantity' => 12],
-            ['artisan_id' => 27, 'category_id' => 8, 'name' => 'Custom Engraved Pen', 'description' => 'A custom engraved pen, ideal for gifts.', 'price' => 24.99, 'quantity' => 20]
+            ['artisan_id' => 27, 'category_id' => 8, 'name' => 'Custom Engraved Pen', 'description' => 'A custom engraved pen, ideal for gifts.', 'price' => 24.99, 'quantity' => 20],
         ];
 
         foreach ($products as $product) {
@@ -27,7 +27,7 @@ class ProductsTableSeeder extends Seeder
                 'name' => $product['name'],
                 'description' => $product['description'],
                 'price' => $product['price'],
-                'quantity' => $product['quantity']
+                'quantity' => $product['quantity'],
             ]);
         }
     }

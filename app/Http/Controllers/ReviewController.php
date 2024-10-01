@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreReviewRequest;
-use App\Http\Requests\UpdateReviewRequest;
+use App\Http\Requests\{StoreReviewRequest, UpdateReviewRequest};
 use App\Models\Review;
 use Illuminate\Http\JsonResponse;
 
@@ -12,14 +11,13 @@ use Illuminate\Http\JsonResponse;
  */
 class ReviewController extends Controller
 {
-
     /**
      * Store a new review for a product.
      * Validates the request data and creates a new review associated with the authenticated user.
      * Returns a JSON response containing the review data including user information.
      *
-     * @param StoreReviewRequest $request The request instance containing the review data.
-     * @return JsonResponse Returns JSON response with the created review data.
+     * @param  StoreReviewRequest $request the request instance containing the review data
+     * @return JsonResponse       returns JSON response with the created review data
      */
     public function store(StoreReviewRequest $request): JsonResponse
     {
@@ -38,9 +36,9 @@ class ReviewController extends Controller
      * Validates the updated review data and updates the review if the authenticated user owns it.
      * Returns a JSON response containing the updated review data.
      *
-     * @param UpdateReviewRequest $request The request instance containing the updated review data.
-     * @param Review $review The review instance to be updated.
-     * @return JsonResponse Returns JSON response with the updated review data.
+     * @param  UpdateReviewRequest $request the request instance containing the updated review data
+     * @param  Review              $review  the review instance to be updated
+     * @return JsonResponse        returns JSON response with the updated review data
      */
     public function update(UpdateReviewRequest $request, Review $review): JsonResponse
     {
@@ -54,8 +52,8 @@ class ReviewController extends Controller
      * Deletes the review if the authenticated user owns it.
      * Returns a JSON response with a success message.
      *
-     * @param int $id The ID of the review to be deleted.
-     * @return JsonResponse Returns JSON response with a success message.
+     * @param  int          $id the ID of the review to be deleted
+     * @return JsonResponse returns JSON response with a success message
      */
     public function destroy(int $id): JsonResponse
     {

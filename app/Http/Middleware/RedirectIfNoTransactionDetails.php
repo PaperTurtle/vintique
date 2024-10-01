@@ -21,9 +21,9 @@ class RedirectIfNoTransactionDetails
      * Checks the session for 'transactionDetails'. If not present or not an array,
      * it redirects to the products index page. Otherwise, it allows the request to proceed.
      *
-     * @param Request $request The incoming request.
-     * @param Closure $next The next middleware in the pipeline.
-     * @return Response The response after handling.
+     * @param  Request  $request the incoming request
+     * @param  Closure  $next    the next middleware in the pipeline
+     * @return Response the response after handling
      */
     public function handle(Request $request, Closure $next): Response
     {
