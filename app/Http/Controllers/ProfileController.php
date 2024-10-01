@@ -6,7 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use App\Services\ImageService;
 use Illuminate\Http\{RedirectResponse, Request};
-use Illuminate\Support\Facades\{Auth, Redirect, Storage};
+use Illuminate\Support\Facades\{Redirect, Storage};
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -20,12 +20,6 @@ class ProfileController extends Controller
         return view('profile.show', ['user' => $user]);
     }
 
-    /**
-     * Display the user's profile form for editing.
-     * This method returns the view for the user to edit their profile information.
-     *
-     * @return View returns the view for editing the user's profile with the user data
-     */
     public function edit(int $userID): View
     {
         $user = User::findOrFail($userID);

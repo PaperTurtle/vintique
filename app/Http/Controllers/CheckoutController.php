@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\{AddToCartRequest, CheckoutRequest, UpdateCartRequest};
 use App\Models\ShoppingCart;
 use App\Services\{CartService, CheckoutService};
-use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 

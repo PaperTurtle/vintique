@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\{Product, ShoppingCart};
+use App\Models\{Product};
 
 /**
  * CartService is responsible for managing the shopping cart functionality.

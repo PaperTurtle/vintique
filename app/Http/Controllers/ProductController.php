@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\{StoreProductRequest, UpdateProductRequest};
 use App\Models\{Product, ProductImage};
 use App\Services\{ImageService, ProductQueryService};
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use Illuminate\View\View;
 
@@ -15,7 +13,6 @@ class ProductController extends Controller
     public const MAX_IMAGES = 4;
 
     public function __construct(protected ImageService $imageService, protected ProductQueryService $productQueryService) {}
-
 
     public function index(Request $request): View
     {
@@ -30,7 +27,6 @@ class ProductController extends Controller
 
         return view("products.index", ['products' => $products->get()]);
     }
-
 
     public function show(Product $product): View
     {
