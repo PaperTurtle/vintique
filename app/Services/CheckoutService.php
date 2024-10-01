@@ -8,10 +8,6 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\{DB, Mail};
 
-/**
- * CheckoutService handles the checkout process for a shopping cart.
- * It processes the checkout by creating transactions and handles success and failure cases.
- */
 class CheckoutService
 {
     /**

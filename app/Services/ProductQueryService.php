@@ -4,11 +4,6 @@ namespace App\Services;
 
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * ProductQueryService is a service class responsible for handling query-related operations for products.
- * It provides functionalities for applying search criteria, category filters, and sorting to product queries,
- * thereby streamlining query customization and enhancing code reusability.
- */
 class ProductQueryService
 {
     /**

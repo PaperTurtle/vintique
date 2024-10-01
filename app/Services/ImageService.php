@@ -6,10 +6,6 @@ use App\Models\{Product, ProductImage};
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * ImageService is a service class responsible for handling image-related operations for products.
- * It provides functionalities for processing, storing, resizing, and deleting images associated with a product.
- */
 class ImageService
 {
     /**
@@ -31,11 +27,11 @@ class ImageService
     {
         // Save the original image temporarily
         $tempFilename = 'temp_' . time() . '.' . $imageFile->getClientOriginalExtension();
-        $tempPath = 'temp/' . $tempFilename;
+        $tempPath = "temp/{$tempFilename}";
         Storage::disk('public')->put($tempPath, file_get_contents($imageFile));
 
         $newFilename = 'profile_' . time() . '.webp';
-        $newPath = 'profile_pictures/' . $newFilename;
+        $newPath = "profile_pictures/{$newFilename}";
 
         // Process the image using the Node.js script
         $this->processImage($tempPath, $newPath, 'imageProcessorProfile.js');
@@ -78,17 +74,17 @@ class ImageService
     private function storeImage(Product $product, UploadedFile $imageFile, string $name): void
     {
         $timestamp = time();
-        $originalFilename = 'product_' . $timestamp . '_original.webp';
-        $originalImagePath = 'product_images/' . $originalFilename;
+        $originalFilename = "product_{$timestamp}_original.webp";
+        $originalImagePath = "product_images/{$originalFilename}";
 
-        $resizedFilename = 'product_' . $timestamp . '_resized.webp';
-        $resizedImagePath = 'product_images/' . $resizedFilename;
+        $resizedFilename = "product_{$timestamp}_resized.webp";
+        $resizedImagePath = "product_images/{$resizedFilename}";
 
-        $showFilename = 'product_' . $timestamp . '_show.webp';
-        $showImagePath = 'product_images/' . $showFilename;
+        $showFilename = "product_{$timestamp}_show.webp";
+        $showImagePath = "product_images/{$showFilename}";
 
-        $thumbnailFilename = 'product_' . $timestamp . '_thumbnail.webp';
-        $thumbnailImagePath = 'product_images/' . $thumbnailFilename;
+        $thumbnailFilename = "product_{$timestamp}_thumbnail.webp";
+        $thumbnailImagePath = "product_images/{$thumbnailFilename}";
 
         // Save the original image
         $imageFile->storeAs('product_images', $originalFilename, 'public');
@@ -123,9 +119,9 @@ class ImageService
      */
     private function processImage(string $sourcePath, string $destinationPath, string $processorScript): void
     {
-        $nodeCommand = "node " . escapeshellarg(base_path('resources/js/' . $processorScript)) . " " .
-            escapeshellarg(storage_path('app/public/' . $sourcePath)) . " " .
-            escapeshellarg(storage_path('app/public/' . $destinationPath));
+        $nodeCommand = "node " . escapeshellarg(base_path("resources/js/{$processorScript}")) . " " .
+            escapeshellarg(storage_path("app/public/{$sourcePath}")) . " " .
+            escapeshellarg(storage_path("app/public/{$destinationPath}"));
 
         exec($nodeCommand);
     }
