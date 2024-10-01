@@ -18,9 +18,7 @@ class EnsureCartIsNotEmpty
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = auth()->user();
-
-        if ($user->cart->isEmpty()) {
+        if (auth()->user()->cart->isEmpty()) {
             return redirect()->route('checkout.index')->with('error', 'Your cart is empty.');
         }
 
