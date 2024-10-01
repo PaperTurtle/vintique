@@ -31,7 +31,6 @@ Route::get('/', function () {
 })->name('home');
 
 // Static pages
-
 Route::view('about-us', 'about-us')->name('about-us');
 Route::view('jobs', 'jobs')->name('jobs');
 Route::view('accessibility', 'accessibility')->name('accessibility');
@@ -42,10 +41,6 @@ Route::prefix("contact-us")->group(function () {
     Route::view('/', 'contact-us')->name('contact-us');
     Route::post('/', [ContactController::class, "sendEmail"]);
 })->name('contact-us');
-
-// Profile routes (publicly accessible)
-Route::get('profile/{userID}', 'show')->name('profile.show')
-    ->where('userID', '[0-9]+');
 
 // Product routes
 Route::resource('products', ProductController::class)->only(['index', 'show']);
@@ -114,4 +109,4 @@ Route::fallback(function () {
 });
 
 // ========= Authentication Routes (Laravel Breeze) =========
-require __DIR__ . '/auth.php';
+require_once __DIR__ . '/auth.php';

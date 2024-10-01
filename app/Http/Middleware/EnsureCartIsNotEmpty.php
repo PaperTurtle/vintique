@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -19,9 +18,9 @@ class EnsureCartIsNotEmpty
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
-        if ($user && ($user->cart == null || $user->cart->isEmpty())) {
+        if ($user->cart == null || $user->cart->isEmpty()) {
             return redirect()->route('checkout.index')->with('error', 'Your cart is empty.');
         }
 

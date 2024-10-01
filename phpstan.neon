@@ -1,0 +1,13 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 5
+    paths:
+        - app
+    excludePaths:
+        - app/Http/Controllers/Auth
+        - app/Http/Controllers/Controller.php
+        - app/Providers
+        - routes/web.php
+    checkMissingIterableValueType: true

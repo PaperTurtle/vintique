@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -19,10 +18,10 @@ class EnsureUserIsArtisan
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->isArtisan) {
-            return $next($request);
+        if (!auth()->user()->isArtisan) {
+            return response()->json(['message' => 'Unauthorized action'], 403);
         }
 
-        return response()->json(['message' => 'Unauthorized action'], 403);
+        return $next($request);
     }
 }
