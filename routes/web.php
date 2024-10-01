@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{CheckoutController, ContactController, DashboardController, ProductController, ProfileController, ReviewController};
 use App\Http\Middleware\{EnsureCartIsNotEmpty, EnsureUserIsArtisan, RedirectIfNoTransactionDetails};
+use App\Models\Product;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +20,14 @@ use Illuminate\Support\Facades\Route;
 
 // ========= Public Routes =========
 // Home page
-Route::get('/', [ProductController::class, 'topRatedProducts'])->name('home');
+Route::get('/', function () {
+    $topRatedProducts = Product::with('reviews')
+        ->withAvg('reviews', 'rating')
+        ->orderByDesc('reviews_avg_rating')
+        ->take(3)
+        ->get();
+    return view('welcome', compact("topRatedProducts"));
+})->name('home');
 
 // Static pages
 
@@ -27,6 +35,7 @@ Route::view('about-us', 'about-us')->name('about-us');
 Route::view('jobs', 'jobs')->name('jobs');
 Route::view('accessibility', 'accessibility')->name('accessibility');
 Route::view('partners', 'partners')->name('partners');
+Route::view("faq", "faq")->name("faq");
 
 Route::prefix("contact-us")->group(function () {
     Route::get('/', function () {
@@ -40,32 +49,19 @@ Route::get('profile/{userID}', [ProfileController::class, 'show'])->name('profil
     ->where('userID', '[0-9]+');
 
 // Product routes
-Route::prefix('products')->group(function () {
-    // Publicly accessible product routes
-    Route::get('/', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/{product}', [ProductController::class, 'show'])
-        ->where('product', '[0-9]+')->name('products.show');
+Route::prefix('products')->controller(ProductController::class)->name("products.")->group(function () {
+    Route::resource('/', ProductController::class)->only(['index', 'show']);
 
-    // Routes requiring authentication
-    Route::middleware('auth')->group(function () {
-        Route::get('/create', [ProductController::class, 'create'])->name('products.create');
-        Route::post('/', [ProductController::class, 'store'])->name('products.store');
-        Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-        Route::put('/{product}', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-        Route::delete('/{product}/images/{productImage}', [ProductController::class, 'destroyImage'])->name('products.images.destroy');
-    });
+    Route::resource('/', ProductController::class)->except(['index', 'show'])->middleware("auth");
 });
-
-Route::view("/faq", "faq.index")->name("faq");
 
 // ========= Authentication Required Routes =========
 Route::middleware('auth')->group(function () {
     // Dashboard
-    Route::prefix("dashboard")->group(function () {
-        Route::get('/', [DashboardController::class, 'index'])->name('dashboard')->middleware(EnsureUserIsArtisan::class);
-        Route::patch('/transactions/{transaction}/mark-as-sent', [DashboardController::class, 'markAsSent'])
-            ->name('dashboard.markAsSent')->middleware(EnsureUserIsArtisan::class);
+    Route::prefix("dashboard")->controller(DashboardController::class)->middleware(EnsureUserIsArtisan::class)->name("dashboard.")->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::patch('/transactions/{transaction}/mark-as-sent', 'markAsSent')
+            ->name('markAsSent');
     });
 
     // Cart routes

@@ -97,7 +97,7 @@ class Product extends Model
      */
     public function isInUserCart(): bool
     {
-        return ShoppingCart::where('user_id', Auth::id())
+        return ShoppingCart::where('user_id', auth()->id())
             ->where('product_id', $this->id)
             ->exists();
     }

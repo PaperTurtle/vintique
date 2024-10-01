@@ -20,14 +20,14 @@
                             <div class="grid">
                                 <label>Email address</label>
                                 <input type="email" name="email" value={{ Auth::user()->email }} required
-                                    class="h-8 text-sm rounded-md font-semibold shadow-sm  
+                                    class="h-8 text-sm rounded-md font-semibold shadow-sm
                                     ring-inset ring-gray-300 border-gray-300 hover:bg-gray-50
                                     focus:ring-2 focus:ring-accent focus:border-accent transition-all delay-[20ms]"></input>
                             </div>
                             <div class="grid mt-4">
                                 <label class="">Phone number</label>
                                 <input type="text" name="phone_number" required
-                                    class="h-8 text-sm rounded-md font-semibold shadow-sm  
+                                    class="h-8 text-sm rounded-md font-semibold shadow-sm
                                     ring-inset ring-gray-300 border-gray-300 hover:bg-gray-50
                                     focus:ring-2 focus:ring-accent focus:border-accent transition-all delay-[20ms]"></input>
                             </div>
@@ -35,7 +35,7 @@
                     </section>
                     <!-- Shipping Information -->
                     @php
-                        $fullName = $user->name;
+                        $fullName = auth()->user()->name;
                         $parts = explode(' ', $fullName);
                         $last_name = array_pop($parts);
                         $first_name = implode(' ', $parts);
@@ -46,35 +46,35 @@
                             <div class="grid flex-grow">
                                 <label class="text-md">First name</label>
                                 <input type="text" name="first_name" value="{{ $first_name }}" required
-                                    class="h-8 text-sm rounded-md font-semibold shadow-sm  
+                                    class="h-8 text-sm rounded-md font-semibold shadow-sm
                                     ring-inset ring-gray-300 border-gray-300 hover:bg-gray-50
                                     focus:ring-2 focus:ring-accent focus:border-accent transition-all delay-[20ms]"></input>
                             </div>
                             <div class="grid ml-4 flex-grow">
                                 <label class="text-md">Last name</label>
                                 <input type="text" name="last_name" value="{{ $last_name }}" required
-                                    class="h-8 text-sm rounded-md font-semibold shadow-sm  
+                                    class="h-8 text-sm rounded-md font-semibold shadow-sm
                                     ring-inset ring-gray-300 border-gray-300 hover:bg-gray-50
                                     focus:ring-2 focus:ring-accent focus:border-accent transition-all delay-[20ms]"></input>
                             </div>
                         </div>
                         <label class="text-md mt-4">Address</label>
                         <input type="text" name="address" required
-                            class="w-full h-8 text-sm rounded-md font-semibold shadow-sm  
+                            class="w-full h-8 text-sm rounded-md font-semibold shadow-sm
                                 ring-inset ring-gray-300 border-gray-300 hover:bg-gray-50
                                 focus:ring-2 focus:ring-accent focus:border-accent transition-all delay-[20ms]"></input>
                         <div class="flex mt-4 justify-between">
                             <div class="grid flex-grow">
                                 <label class="text-md">City</label>
                                 <input type="text" name="city" required
-                                    class="h-8 text-sm rounded-md font-semibold shadow-sm  
+                                    class="h-8 text-sm rounded-md font-semibold shadow-sm
                                         ring-inset ring-gray-300 border-gray-300 hover:bg-gray-50
                                         focus:ring-2 focus:ring-accent focus:border-accent transition-all delay-[20ms]"></input>
                             </div>
                             <div class="grid ml-4 flex-grow">
                                 <label class="text-md">Country</label>
                                 <input type="text" name="country" required
-                                    class="h-8 text-sm rounded-md font-semibold shadow-sm  
+                                    class="h-8 text-sm rounded-md font-semibold shadow-sm
                                         ring-inset ring-gray-300 border-gray-300 hover:bg-gray-50
                                         focus:ring-2 focus:ring-accent focus:border-accent transition-all delay-[20ms]"></input>
                             </div>
@@ -83,14 +83,14 @@
                             <div class="grid flex-grow">
                                 <label class="text-md">State / Province</label>
                                 <input type="text" name="state_province" x-model="state_province"
-                                    class="h-8 text-sm rounded-md font-semibold shadow-sm 
+                                    class="h-8 text-sm rounded-md font-semibold shadow-sm
                                         ring-inset ring-gray-300 border-gray-300 hover:bg-gray-50
                                         focus:ring-2 focus:ring-accent focus:border-accent transition-all delay-[20ms]"></input>
                             </div>
                             <div class="grid ml-4 flex-grow">
                                 <label class="text-md">Postal code</label>
                                 <input type="text" name="postal_code" required
-                                    class="h-8 text-sm rounded-md font-semibold shadow-sm  
+                                    class="h-8 text-sm rounded-md font-semibold shadow-sm
                                         ring-inset ring-gray-300 border-gray-300 hover:bg-gray-50
                                         focus:ring-2 focus:ring-accent focus:border-accent transition-all delay-[20ms]"></input>
                             </div>

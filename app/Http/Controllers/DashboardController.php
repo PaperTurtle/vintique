@@ -19,9 +19,9 @@ class DashboardController extends Controller
      * Retrieves transactions associated with the products of the authenticated user, typically an artisan,
      * and passes them to the dashboard view.
      *
-     * @return Factory|View returns a view of the dashboard with transaction details
+     * @return View returns a view of the dashboard with transaction details
      */
-    public function index(): Factory|View
+    public function index(): View
     {
         $transactions = Transaction::with('product')
             ->whereHas('product', function ($query) {
@@ -30,8 +30,7 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($transaction) {
-                $transaction->delivered_on = $transaction->updated_at->format('F j, Y'); // format date
-
+                $transaction->delivered_on = $transaction->updated_at->format('F j, Y');
                 return $transaction;
             })
             ->groupBy(function ($transaction) {
@@ -51,7 +50,7 @@ class DashboardController extends Controller
      */
     public function markAsSent(Transaction $transaction): JsonResponse
     {
-        if ($transaction->product->artisan_id !== Auth::id()) {
+        if ($transaction->product->artisan_id !== auth()->id()) {
             return response()->json(['message' => 'Unauthorized action'], 403);
         }
 

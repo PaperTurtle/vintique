@@ -38,8 +38,7 @@ class CartService
             if ($quantity > $product->quantity) {
                 return ['error' => 'Requested quantity exceeds available stock'];
             }
-            $cartItem = ShoppingCart::create([
-                'user_id' => auth()->id(),
+            $cartItem = auth()->user()->cart()->create([
                 'product_id' => $productId,
                 'quantity' => $quantity,
             ]);

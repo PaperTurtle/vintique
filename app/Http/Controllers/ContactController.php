@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SendEmailRequest;
 use App\Mail\ContactMail;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\{JsonResponse, Request};
@@ -24,15 +25,9 @@ class ContactController extends Controller
      *
      * @return JsonResponse returns a JSON response indicating the success of the email operation
      */
-    public function sendEmail(Request $request): JsonResponse
+    public function sendEmail(SendEmailRequest $request): JsonResponse
     {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'first-name' => 'required',
-            'last-name' => 'required',
-            'email' => 'required|email',
-            'message' => 'required',
-        ]);
+        $validatedData = $request->validated();
 
         // Prepare the data for the email
         $data = [
