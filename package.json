@@ -18,7 +18,7 @@
 		"vite": "^4.0.0"
 	},
 	"dependencies": {
-		"@tailwindcss/typography": "github:tailwindcss/typography",
+		"@tailwindcss/typography": "0.5.11",
 		"fs": "^0.0.1-security",
 		"path": "^0.12.7",
 		"sharp": "^0.33.0"
