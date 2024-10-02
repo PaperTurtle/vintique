@@ -21,6 +21,6 @@
 		"@tailwindcss/typography": "github:tailwindcss/typography",
 		"fs": "^0.0.1-security",
 		"path": "^0.12.7",
-		"sharp": "^0.33.0"
+		"sharp": "^0.33.1"
 	}
 }
